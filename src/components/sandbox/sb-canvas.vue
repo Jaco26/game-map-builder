@@ -24,7 +24,15 @@ export default class SbCanvas extends Vue {
   provide(): Object {
     return {
       ctx: this.ctx,
+      draw: this._draw,
     };
+  }
+
+  _draw(cb: Function) {
+    if (!this.ctx) return;
+    this.ctx.beginPath();
+    cb(this.ctx);
+    this.ctx.closePath();
   }
 
   mounted() {
@@ -40,10 +48,9 @@ export default class SbCanvas extends Vue {
   }
 
   onMousemove(e: any) {
-    if (!this.ctx) return;
-    this.ctx.beginPath();
-    this.ctx.fillRect(e.offsetX, e.offsetY, 5, 5);
-    this.ctx.closePath();
+    this._draw((ctx: CanvasRenderingContext2D) => {
+      ctx.strokeRect(e.offsetX, e.offsetY, 10, 10);
+    });
   }
 
 };
