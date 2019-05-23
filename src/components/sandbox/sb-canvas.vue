@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Provide } from 'vue-property-decorator'
 
 @Component
 export default class SbCanvas extends Vue {
@@ -21,12 +21,7 @@ export default class SbCanvas extends Vue {
   width: number = 400;
   isMousedown: boolean = false;
 
-  provide(): Object {
-    return {
-      ctx: this.ctx,
-      draw: this._draw,
-    };
-  }
+  @Provide() draw = this._draw
 
   _draw(cb: Function) {
     if (!this.ctx) return;

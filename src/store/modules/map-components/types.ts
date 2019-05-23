@@ -1,16 +1,9 @@
-
-interface Rect {
-  x: number,
-  y: number,
-  width: number,
-  height: number
-}
+import { IRectangle } from '@/util/types'
 
 export interface MapComponent {
-  zoomLevel: number,
   name: string,
   color: string,
-  dimensions: Rect
+  dimensions?: IRectangle
 }
 
 
