@@ -7,9 +7,6 @@ export class GridTile {
   width: number = 0;
   height: number = 0;
 
-  color: string = '';
-  outline: string = '';
-
   constructor(row: number, col: number) {
     this.row = row;
     this.col = col;
@@ -22,5 +19,8 @@ export interface GridState {
   cols: number,
   rows: number,
   grid: GridTile[][],
-  selected: GridTile | null,
+  selected: {
+    row: number | null,
+    col: number | null
+  },
 }

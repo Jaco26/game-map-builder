@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
-import grid from './grid'
+import grid from './modules/grid'
 
 export default new Vuex.Store({
   modules: {

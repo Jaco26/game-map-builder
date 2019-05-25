@@ -3,11 +3,14 @@ import { GridTile, GridState } from './types'
 function initialState(): GridState {
   return {
     width: 500,
-    height: 500,
+    height: 600,
     cols: 0,
     rows: 0,
     grid: [],
-    selected: null,
+    selected: {
+      row: null,
+      col: null,
+    },
   }
 }
 
@@ -27,13 +30,10 @@ export default {
         state.grid.push(row);
       }
     },
-    SET_SELECTED(state: GridState, payload: { rowIndex: number, colIndex: number }) {
+    SET_SELECTED(state: GridState, payload: { rowIndex: number | null, colIndex: number | null }) {
       const { rowIndex, colIndex } = payload;
-      if (state.selected) {
-        state.selected.color = '';
-      }
-      state.selected = state.grid[rowIndex][colIndex];
-      state.selected.color = '#44a';
+      state.selected.row = rowIndex;
+      state.selected.col = colIndex;
     },
     SIZE_TILES(state: GridState) {
       const width = state.width / state.cols;
@@ -48,4 +48,12 @@ export default {
       });
     }
   },
+  getters: {
+    selectedTile(state: GridState): GridTile | null {
+      if (state.selected.row) {
+        return state.grid[state.selected.row][state.selected.col!];
+      }
+      return null
+    }
+  }
 }
