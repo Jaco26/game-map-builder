@@ -2,12 +2,8 @@
   <div class="my-canvas-wrapper">
     <canvas 
       ref="my-canvas"
-      class="cvs-cls"
       :height="height"
       :width="width"
-      @mousedown="isMousedown = true"
-      @mouseup="isMousedown = false"
-      v-on="isMousedown ? { mousemove: onMousemove } : null"
     ></canvas>
     <slot></slot>
   </div>
@@ -15,7 +11,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Provide } from 'vue-property-decorator'
+import { Component, Watch } from 'vue-property-decorator'
 import { State, Mutation, namespace } from 'vuex-class';
 import { MutationMethod } from 'vuex';
 import { GridTile } from '@/store/grid'
@@ -24,6 +20,10 @@ const gridModule = namespace('grid');
 
 @Component
 export default class SbCanvas extends Vue {
+  // constructor() {
+  //   super();
+  //   console.log(this)
+  // }
   isMousedown: boolean = false;
 
   @gridModule.State grid: [];
@@ -33,9 +33,30 @@ export default class SbCanvas extends Vue {
 
   @gridModule.State cols: number;
   @gridModule.State rows: number;
+  @gridModule.State selected: GridTile;
+
+  @Watch('selected')
+  onSelectedChange(newVal: GridTile, oldVal: GridTile | null) {
+    if (oldVal) console.log(oldVal.color)
+    this.clearRect();
+    this.drawGrid()
+  }
 
   @gridModule.Mutation GENERATE_GRID: any
   @gridModule.Mutation SIZE_TILES: any
+  @gridModule.Mutation SET_SELECTED: any;
+
+  // getTile(e: MouseEvent) {
+  //   const vm = this;
+  //   const rowIndex = Math.floor(e.offsetY / (vm.height / vm.rows));
+  //   const colIndex = Math.floor(e.offsetX / (vm.width / vm.cols));
+  //   vm.SET_SELECTED({ colIndex, rowIndex });
+  // }
+
+  clearRect() {
+    if (!this.ctx) return;
+    this.ctx.clearRect(0, 0, this.width, this.height);
+  }
 
   draw(cb: Function) {
     if (!this.ctx) return;
@@ -44,28 +65,24 @@ export default class SbCanvas extends Vue {
     this.ctx.closePath();
   }
 
-  sizeTiles() {
-    
-
-  }
 
   drawGrid() {
-    
-    // this.grid.forEach((tile: GridTile, i) => {
-    //   tile.width = width;
-    //   tile.height = height;
-    //   tile.x = 
-    //   // tile.y = tile.height * (i % this.height);
-    //   console.log(tile.x, tile.y)
-    // });
+    this.grid.forEach((row: GridTile[]) => {
+      row.forEach((tile: GridTile) => {
+        this.draw((ctx: CanvasRenderingContext2D) => {
+          ctx.rect(tile.x, tile.y, tile.width, tile.height);
+          ctx.fillStyle = tile.color || 'white';
+          ctx.fill();
+          ctx.stroke();
+        });
+      });
+    });
   }
 
   mounted() {
     const c: any = this.$refs['my-canvas']
-    c.width = 600;
-    c.height = 600;
-    this.grid;
     this.GENERATE_GRID({ rows: 10, cols: 10 })
+    this.SIZE_TILES();
     this.drawGrid();
   }
 
@@ -83,10 +100,3 @@ export default class SbCanvas extends Vue {
 
 };
 </script>
-
-<style scoped>
-.cvs-cls {
-  background-color: aqua;
-  /* height: 100%; */
-}
-</style>
