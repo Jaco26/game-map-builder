@@ -26,3 +26,9 @@ export interface GridState {
     col: number | null
   },
 }
+
+export interface NewGridPayload {
+  cols: number,
+  rows: number,
+  grid: GridTile[][],
+}

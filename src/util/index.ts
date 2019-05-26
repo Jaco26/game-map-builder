@@ -8,18 +8,15 @@ export async function saveToStorage(storageKey: string, data: object): Promise<v
   }
 }
 
-export async function retrieveFromStorage(storageKey: string): Promise<object | null> {
-  try {
-    await setTimeout(() => {
+export  function retrieveFromStorage(storageKey: string): Promise<object | null> {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
       const item = localStorage.getItem(storageKey);
       if (item) {
-        return JSON.parse(item);
+        resolve(JSON.parse(item));
       }
+      reject('Couldn\'t find grid')
     }, 100);
-  } catch (error) {
-    console.error('ERROR retrieving item to localStorage', error);
-  } finally {
-    return null;
-  }
+  })
 }
 

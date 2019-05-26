@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-flex>
     <v-layout>
       <v-flex>
         <SBCanvasControls />
@@ -12,7 +12,7 @@
       </v-flex>
     </v-layout>
     
-  </div> 
+  </v-flex> 
 </template>
 
 <script>

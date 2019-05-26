@@ -7,7 +7,11 @@
       v-model="color"
       :items="clrOptions"
     ></v-autocomplete>
-  <v-spacer></v-spacer>
+
+    <v-btn @click="GENERATE_NEW_GRID(newGridArgs)">New Grid</v-btn>
+    <v-btn @click="SAVE_GRID">Save Grid</v-btn>
+
+    <v-spacer></v-spacer>
     <v-slider 
       min="1"
       max="10"
@@ -32,8 +36,19 @@ export default class SBCanvasControls extends Vue {
   scale = 5;
   clrOptions = ['blue', 'green', 'red', 'yellow', 'gray'];
 
+  newGridArgs = {
+    rows: 20,
+    cols: 12,
+  };
+
+  // STORE
+  // getters
   @gridMod.Getter selectedTile!: GridTile | null;
+  // mutations
   @gridMod.Mutation SET_TILE_COLOR: any;
+  // actions
+  @gridMod.Action GENERATE_NEW_GRID: any;
+  @gridMod.Action SAVE_GRID: any;
 
   get color(): string {
     if (this.selectedTile) return this.selectedTile.color;

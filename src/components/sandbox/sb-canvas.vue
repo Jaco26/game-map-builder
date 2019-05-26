@@ -13,7 +13,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { GridTile } from '@/store/modules/grid/types'
-import { State, Getter, Mutation, namespace } from 'vuex-class'
+import { State, Getter, Mutation, Action, namespace } from 'vuex-class'
 import { Component, Watch, Provide } from 'vue-property-decorator'
 const gridMod = namespace('grid')
 
@@ -35,9 +35,10 @@ export default class SBCanvas extends Vue {
   // getters
   @gridMod.Getter selectedTile!: GridTile | null;
   // mutations
-  @gridMod.Mutation GENERATE_GRID: any
   @gridMod.Mutation SIZE_TILES: any
   @gridMod.Mutation SET_SELECTED: any;
+  // actions
+  @gridMod.Action LOAD_GRID: any;
 
   // METHODS
   getTile(e: MouseEvent): void {
@@ -89,15 +90,14 @@ export default class SBCanvas extends Vue {
   }
   @Watch('selectedTile', { deep: true })
   onSelectedChange(newVal: GridTile | null, oldVal: GridTile | null) {   
-    if (newVal )this.drawGrid(newVal);
+    if (newVal) this.drawGrid(newVal);
   }
 
   // LIFECYCLE
-  mounted() {
+  async mounted() {
     const c: any = this.$refs['my-canvas']
-    this.GENERATE_GRID({ rows: 24, cols: 20 })
+    await this.LOAD_GRID();
     this.SIZE_TILES();
-    this.drawGrid();
   }
 }
 </script>

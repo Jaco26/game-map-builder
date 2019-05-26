@@ -1,4 +1,8 @@
-import { GridTile, GridState } from './types'
+import { ActionContext } from 'vuex';
+import { GridTile, GridState, NewGridPayload } from './types'
+import { saveToStorage, retrieveFromStorage } from '@/util/index'
+
+const STORAGE_KEY = 'grid';
 
 function initialState(): GridState {
   return {
@@ -18,17 +22,8 @@ export default {
   namespaced: true,
   state: initialState(),
   mutations: {
-    GENERATE_GRID(state: GridState, payload: { rows: number, cols: number }) {
-      const { rows, cols } = payload;
-      state.rows = rows;
-      state.cols = cols;
-      for (let r = 0; r < rows; r++) {
-        const row: GridTile[] = [];
-        for (let c = 0; c < cols; c++) {
-          row.push(new GridTile(r, c));
-        }
-        state.grid.push(row);
-      }
+    SET_GRID(state: GridState, payload: NewGridPayload) {
+      Object.assign(state, payload);
     },
     SET_SELECTED(state: GridState, payload: { rowIndex: number | null, colIndex: number | null }) {
       const { rowIndex, colIndex } = payload;
@@ -39,7 +34,6 @@ export default {
       if (state.selected.row) {
         state.grid[state.selected.row][state.selected.col!].color = payload;
       }
-      
     },
     SIZE_TILES(state: GridState) {
       const width = state.width / state.cols;
@@ -53,6 +47,35 @@ export default {
         });
       });
     }
+  },
+  actions: {
+    GENERATE_NEW_GRID(ctx: ActionContext<GridState, null>, payload: { rows: number, cols: number }) {
+      const { rows, cols } = payload;
+      const accum: NewGridPayload = { rows, cols, grid: [] };
+      for (let r = 0; r < rows; r++) {
+        const row: GridTile[] = [];
+        for (let c = 0; c < cols; c++) {
+          row.push(new GridTile(r, c));
+        }
+        accum.grid.push(row);
+      }
+      ctx.commit("SET_GRID", accum);
+      saveToStorage(STORAGE_KEY, accum);
+    },
+    async LOAD_GRID(ctx: ActionContext<GridState, null>) {
+      try {
+        const retrievedGrid = await retrieveFromStorage(STORAGE_KEY);
+        if (retrievedGrid) {
+          ctx.commit("SET_GRID", retrievedGrid);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    SAVE_GRID(ctx: ActionContext<GridState, null>) {
+      const { rows, cols, grid } = ctx.state;
+      saveToStorage(STORAGE_KEY, { rows, cols, grid });
+    },
   },
   getters: {
     selectedTile(state: GridState): GridTile | null {
