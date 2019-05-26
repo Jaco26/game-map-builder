@@ -35,6 +35,12 @@ export default {
       state.selected.row = rowIndex;
       state.selected.col = colIndex;
     },
+    SET_TILE_COLOR(state: GridState, payload: string) {
+      if (state.selected.row) {
+        state.grid[state.selected.row][state.selected.col!].color = payload;
+      }
+      
+    },
     SIZE_TILES(state: GridState) {
       const width = state.width / state.cols;
       const height = state.height / state.rows;
@@ -50,7 +56,7 @@ export default {
   },
   getters: {
     selectedTile(state: GridState): GridTile | null {
-      if (state.selected.row) {
+      if (state.selected.row !== null) {
         return state.grid[state.selected.row][state.selected.col!];
       }
       return null

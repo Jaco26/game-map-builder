@@ -1,7 +1,17 @@
 <template>
   <div>
-    <SBCanvasControls />
-    <SBCanvas />
+    <v-layout>
+      <v-flex>
+        <SBCanvasControls />
+      </v-flex>
+    </v-layout>
+    
+    <v-layout class="mt-4">
+      <v-flex>
+        <SBCanvas />
+      </v-flex>
+    </v-layout>
+    
   </div> 
 </template>
 

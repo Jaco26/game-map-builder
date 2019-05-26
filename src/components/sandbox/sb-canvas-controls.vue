@@ -1,23 +1,46 @@
 <template>
-  <v-toolbar dense flat>
-    <v-btn flat>HEllo</v-btn>
-    <v-btn flat>Byebye</v-btn>
+  <v-toolbar flat>
+    <v-autocomplete
+      hide-details
+      label="Choose selected tile's color"
+      :disabled="!selectedTile"
+      v-model="color"
+      :items="clrOptions"
+    ></v-autocomplete>
+  <v-spacer></v-spacer>
     <v-slider 
       min="1"
       max="10"
       ticks
       :tick-labels="[1,2,3,4,5,6,7,8,9,10]"
       v-model="scale"
-    ></v-slider>
+    ></v-slider>    
   </v-toolbar>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
+import { Getter, Mutation, namespace } from 'vuex-class'
+
+import { GridTile } from '@/store/modules/grid/types';
+
+const gridMod = namespace('grid');
 
 @Component
 export default class SBCanvasControls extends Vue {
-  scale: number = 5;
+  scale = 5;
+  clrOptions = ['blue', 'green', 'red', 'yellow', 'gray'];
+
+  @gridMod.Getter selectedTile!: GridTile | null;
+  @gridMod.Mutation SET_TILE_COLOR: any;
+
+  get color(): string {
+    if (this.selectedTile) return this.selectedTile.color;
+    return '';
+  }
+  set color(val) {
+    this.SET_TILE_COLOR(val);
+  }
 }
 </script>

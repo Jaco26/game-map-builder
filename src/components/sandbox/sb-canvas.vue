@@ -21,11 +21,13 @@ const gridMod = namespace('grid')
 export default class SBCanvas extends Vue {
 
   // DATA
-  selectedColor: string = 'chartreuse';
+  clrNeutral: string = '#fafafa';
+  clrOffwhite: string = '#f1f1f1';
+  clrSelected: string = '#333';
 
-  // VUEX
+  // STORE
   // state
-  @gridMod.State grid!: [];
+  @gridMod.State grid!: GridTile[][];
   @gridMod.State width!: number;
   @gridMod.State height!: number;
   @gridMod.State cols!: number;
@@ -39,10 +41,9 @@ export default class SBCanvas extends Vue {
 
   // METHODS
   getTile(e: MouseEvent): void {
-    const vm = this;
-    const rowIndex = Math.floor(e.offsetY / (vm.height / vm.rows));
-    const colIndex = Math.floor(e.offsetX / (vm.width / vm.cols));
-    vm.SET_SELECTED({ colIndex, rowIndex });
+    const rowIndex = Math.floor(e.offsetY / (this.height / this.rows));
+    const colIndex = Math.floor(e.offsetX / (this.width / this.cols));
+    this.SET_SELECTED({ colIndex, rowIndex });
   }
   clearRect(
     x: number = 0,
@@ -59,12 +60,16 @@ export default class SBCanvas extends Vue {
     cb(this.ctx);
     this.ctx.closePath();
   }
-  drawGrid() {
+  drawGrid(t?: GridTile) {
     this.grid.forEach((row: GridTile[]) => {
       row.forEach((tile: GridTile) => {
         this.draw((ctx: CanvasRenderingContext2D) => {
-          ctx.strokeRect(tile.x, tile.y, tile.width, tile.height);
-          // ctx.stroke();selectedTile
+          ctx.fillStyle = tile.color || this.clrOffwhite;
+          ctx.rect(tile.x, tile.y, tile.width, tile.height);
+          ctx.fill();
+          if (t === tile) {
+            ctx.stroke();
+          }
         });
       });
     });
@@ -78,38 +83,21 @@ export default class SBCanvas extends Vue {
   }
 
   // WATCH
-  @Watch('selectedTile')
-  onSelectedChange(newVal: GridTile | null, oldVal: GridTile | null) {
-    if (oldVal) {
-      const { x, y, width, height } = oldVal;
-      this.draw((ctx: CanvasRenderingContext2D) => {
-        ctx.clearRect(x, y, width, height);
-        ctx.strokeRect(x, y, width, height);
-      });
-    }
-    if (newVal) {
-      const { x, y, width, height } = newVal;
-      this.draw((ctx: CanvasRenderingContext2D) => {
-        ctx.fillStyle = this.selectedColor;
-        ctx.rect(x, y, width, height);
-        ctx.fill();
-        ctx.stroke();
-      });
-    }
+  @Watch('grid', { deep: true })
+  onGridChange() {
+    this.drawGrid();
+  }
+  @Watch('selectedTile', { deep: true })
+  onSelectedChange(newVal: GridTile | null, oldVal: GridTile | null) {   
+    if (newVal )this.drawGrid(newVal);
   }
 
   // LIFECYCLE
   mounted() {
     const c: any = this.$refs['my-canvas']
-    this.GENERATE_GRID({ rows: 12, cols: 10 })
+    this.GENERATE_GRID({ rows: 24, cols: 20 })
     this.SIZE_TILES();
     this.drawGrid();
-
-    this.draw((ctx: CanvasRenderingContext2D) => {
-      ctx.moveTo(44, 300)
-      ctx.lineTo(500, 200)
-      ctx.stroke()
-    })
   }
 }
 </script>
