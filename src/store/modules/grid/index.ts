@@ -49,9 +49,9 @@ export default {
     }
   },
   actions: {
-    GENERATE_NEW_GRID(ctx: ActionContext<GridState, null>, payload: { rows: number, cols: number }) {
-      const { rows, cols } = payload;
-      const accum: NewGridPayload = { rows, cols, grid: [] };
+    GENERATE_NEW_GRID(ctx: ActionContext<GridState, null>, payload: { rows: number, cols: number, name: string }) {
+      const { rows, cols, name } = payload;
+      const accum: NewGridPayload = { name, rows, cols, grid: [] };
       for (let r = 0; r < rows; r++) {
         const row: GridTile[] = [];
         for (let c = 0; c < cols; c++) {
@@ -61,16 +61,6 @@ export default {
       }
       ctx.commit("SET_GRID", accum);
       saveToStorage(STORAGE_KEY, accum);
-    },
-    async LOAD_GRID(ctx: ActionContext<GridState, null>) {
-      try {
-        const retrievedGrid = await retrieveFromStorage(STORAGE_KEY);
-        if (retrievedGrid) {
-          ctx.commit("SET_GRID", retrievedGrid);
-        }
-      } catch (err) {
-        console.error(err);
-      }
     },
     SAVE_GRID(ctx: ActionContext<GridState, null>) {
       const { rows, cols, grid } = ctx.state;

@@ -4,9 +4,11 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 import grid from './modules/grid'
+import gridList from './modules/grid-list'
 
 export default new Vuex.Store({
   modules: {
     grid,
+    gridList,
   },
 })

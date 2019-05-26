@@ -7,7 +7,7 @@
     </v-layout>
     
     <v-layout class="mt-4">
-      <v-flex>
+      <v-flex >
         <SBCanvas />
       </v-flex>
     </v-layout>

@@ -28,6 +28,7 @@ export interface GridState {
 }
 
 export interface NewGridPayload {
+  name: string,
   cols: number,
   rows: number,
   grid: GridTile[][],

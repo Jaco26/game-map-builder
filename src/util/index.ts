@@ -1,7 +1,12 @@
 export async function saveToStorage(storageKey: string, data: object): Promise<void> {
   try {
     await setTimeout(() => {
-      localStorage.setItem(storageKey, JSON.stringify(data));
+      const toSave = [];
+      const prev = localStorage.getItem(storageKey);
+      if (prev) {
+        toSave.push(...JSON.parse(prev));
+      }
+      localStorage.setItem(storageKey, JSON.stringify([ ...toSave, data ]));
     }, 200)
   } catch (error) {
     console.error('ERROR saving item to localStorage', error);
@@ -15,7 +20,7 @@ export  function retrieveFromStorage(storageKey: string): Promise<object | null>
       if (item) {
         resolve(JSON.parse(item));
       }
-      reject('Couldn\'t find grid')
+      reject('Couldn\'t find grids')
     }, 100);
   })
 }
