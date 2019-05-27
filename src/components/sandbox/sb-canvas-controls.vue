@@ -8,7 +8,8 @@
       :items="clrOptions"
     ></v-autocomplete>
 
-    <v-btn @click="GENERATE_NEW_GRID(newGridArgs)">New Grid</v-btn>
+    <!-- <v-btn @click="GENERATE_NEW_GRID(newGridArgs)">New Grid</v-btn> -->
+    <v-btn @click="$emit('update:makeNewGrid', !makeNewGrid)">New Grid</v-btn>
     <v-btn @click="SAVE_GRID">Save Grid</v-btn>
 
     <v-spacer></v-spacer>
@@ -24,7 +25,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component } from 'vue-property-decorator'
+import { Component, Prop } from 'vue-property-decorator'
 import { Getter, Mutation, namespace } from 'vuex-class'
 
 import { GridTile } from '@/store/modules/grid/types';
@@ -33,13 +34,17 @@ const gridMod = namespace('grid');
 
 @Component
 export default class SBCanvasControls extends Vue {
+  // Props
+  @Prop(Boolean) makeNewGrid!: boolean;
+
+  // Data
   scale = 5;
   clrOptions = ['blue', 'green', 'red', 'yellow', 'gray'];
-
   newGridArgs = {
     rows: 20,
     cols: 12,
   };
+
 
   // STORE
   // getters
