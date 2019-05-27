@@ -44,7 +44,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn @click="$emit('update:makeNewGrid', false)">Nevermind</v-btn>
+          <v-btn @click="onClose">Nevermind</v-btn>
           <v-btn type="submit">Create</v-btn>
         </v-card-actions>
       </v-form>
@@ -61,7 +61,7 @@ export default class SBCanvasNewGridDialog extends Vue {
   @Prop(Boolean) makeNewGrid!: boolean
 
   name: string = ''
-  nameRules = [(v: string) => v.length || 'Name is required']
+  nameRules = [(v: string) => !!v || 'Name is required']
   rows: number = 20
   rowsRules = [(v: number) => (!!v && v <= 40 && v >= 10) || 'There must be between 10 and 40 rows']
   cols: number = 12
@@ -69,10 +69,15 @@ export default class SBCanvasNewGridDialog extends Vue {
 
   @Action('grid/GENERATE_NEW_GRID') GENERATE_NEW_GRID!: Function
 
+  onClose() {
+    this.$emit('update:makeNewGrid', false);
+  }
+
   onSubmit() {
     if (this.$refs.form.validate()) {
       const { name, rows, cols } = this;
       this.GENERATE_NEW_GRID({ name, rows, cols });
+      this.onClose();
     }
   }
 

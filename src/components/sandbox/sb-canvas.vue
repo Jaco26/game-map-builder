@@ -40,6 +40,7 @@ export default class SBCanvas extends Vue {
   @gridMod.Mutation SET_SELECTED: any;
   // actions
   @gridListMod.Action LOAD_GRID_LIST: any;
+  @gridListMod.Action SELECT_GRID: any;
 
   // METHODS
   getTile(e: MouseEvent): void {
@@ -98,6 +99,7 @@ export default class SBCanvas extends Vue {
   async mounted() {
     const c: any = this.$refs['my-canvas']
     await this.LOAD_GRID_LIST();
+    this.SELECT_GRID(0);
     this.SIZE_TILES();
   }
 }

@@ -8,9 +8,14 @@
       :items="clrOptions"
     ></v-autocomplete>
 
-    <!-- <v-btn @click="GENERATE_NEW_GRID(newGridArgs)">New Grid</v-btn> -->
     <v-btn @click="$emit('update:makeNewGrid', !makeNewGrid)">New Grid</v-btn>
-    <v-btn @click="SAVE_GRID">Save Grid</v-btn>
+
+    <v-menu offset-y>
+      <template v-slot:activator="{ on }">
+        <v-btn color="primary" v-on="on">Load Grid</v-btn>
+      </template>
+    </v-menu>
+    <!-- <v-btn @click="SAVE_GRID">Save Grid</v-btn> -->
 
     <v-spacer></v-spacer>
     <v-slider 
@@ -61,6 +66,7 @@ export default class SBCanvasControls extends Vue {
   }
   set color(val) {
     this.SET_TILE_COLOR(val);
+    this.SAVE_GRID();
   }
 }
 </script>

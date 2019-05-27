@@ -20,6 +20,7 @@ export interface GridState {
   height: number,
   cols: number,
   rows: number,
+  id: number | null,
   grid: GridTile[][],
   selected: {
     row: number | null,

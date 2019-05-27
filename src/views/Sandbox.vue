@@ -1,7 +1,9 @@
 <template>
   <v-flex>
 
-    <SBCanvasNewGridDialog :makeNewGrid.sync="makeNewGrid" />
+    <SBCanvasNewGridDialog v-if="makeNewGrid" :makeNewGrid.sync="makeNewGrid" />
+
+
 
     <v-layout>
       <v-flex>

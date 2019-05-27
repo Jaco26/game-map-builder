@@ -1,6 +1,7 @@
 import { ActionContext } from 'vuex';
 import { GridTile, GridState, NewGridPayload } from './types'
-import { saveToStorage, retrieveFromStorage } from '@/util/index'
+import { saveToStorage, updateStorage } from '@/util/index'
+import { SavedGrid } from '../grid-list/types';
 
 const STORAGE_KEY = 'grid';
 
@@ -10,6 +11,7 @@ function initialState(): GridState {
     height: 600,
     cols: 0,
     rows: 0,
+    id: null,
     grid: [],
     selected: {
       row: null,
@@ -22,7 +24,7 @@ export default {
   namespaced: true,
   state: initialState(),
   mutations: {
-    SET_GRID(state: GridState, payload: NewGridPayload) {
+    SET_GRID(state: GridState, payload: SavedGrid) {
       Object.assign(state, payload);
     },
     SET_SELECTED(state: GridState, payload: { rowIndex: number | null, colIndex: number | null }) {
@@ -49,7 +51,7 @@ export default {
     }
   },
   actions: {
-    GENERATE_NEW_GRID(ctx: ActionContext<GridState, null>, payload: { rows: number, cols: number, name: string }) {
+    async GENERATE_NEW_GRID(ctx: ActionContext<GridState, null>, payload: { rows: number, cols: number, name: string }) {
       const { rows, cols, name } = payload;
       const accum: NewGridPayload = { name, rows, cols, grid: [] };
       for (let r = 0; r < rows; r++) {
@@ -60,11 +62,16 @@ export default {
         accum.grid.push(row);
       }
       ctx.commit("SET_GRID", accum);
-      saveToStorage(STORAGE_KEY, accum);
+      await saveToStorage(STORAGE_KEY, accum);
+      ctx.dispatch('gridList/LOAD_GRID_LIST', null, { root: true });
     },
     SAVE_GRID(ctx: ActionContext<GridState, null>) {
-      const { rows, cols, grid } = ctx.state;
-      saveToStorage(STORAGE_KEY, { rows, cols, grid });
+      
+      const { rows, cols, grid, id } = ctx.state;
+      console.log('saving', id)
+      if (id !== null) {
+        updateStorage(STORAGE_KEY, id, { rows, cols, grid });
+      }
     },
   },
   getters: {
