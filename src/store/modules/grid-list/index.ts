@@ -34,6 +34,7 @@ export default {
       const grid = ctx.state.list.find(g => g.id === payload);
       if (grid) {
         ctx.commit('grid/SET_GRID', grid, { root: true });
+        ctx.commit('grid/SIZE_TILES', null, { root: true });
       }
     }
   }

@@ -64,6 +64,8 @@ export default class SBCanvas extends Vue {
     this.ctx.closePath();
   }
   drawGrid(t?: GridTile) {
+    if (this.ctx) this.ctx.clearRect(0, 0, this.width, this.height);
+
     this.grid.forEach((row: GridTile[]) => {
       row.forEach((tile: GridTile) => {
         this.draw((ctx: CanvasRenderingContext2D) => {
@@ -88,6 +90,7 @@ export default class SBCanvas extends Vue {
   // WATCH
   @Watch('grid', { deep: true })
   onGridChange() {
+    console.log('drawing grid')
     this.drawGrid();
   }
   @Watch('selectedTile', { deep: true })

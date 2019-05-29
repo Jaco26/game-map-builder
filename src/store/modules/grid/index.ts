@@ -25,6 +25,11 @@ export default {
   state: initialState(),
   mutations: {
     SET_GRID(state: GridState, payload: SavedGrid) {
+      // Object.entries(payload).forEach(([key, value]) => {
+      //   if (state[key] !== undefined) {
+      //     state[key] = value;
+      //   }
+      // });
       Object.assign(state, payload);
     },
     SET_SELECTED(state: GridState, payload: { rowIndex: number | null, colIndex: number | null }) {

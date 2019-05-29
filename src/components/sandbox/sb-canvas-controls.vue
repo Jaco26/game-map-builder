@@ -14,6 +14,17 @@
       <template v-slot:activator="{ on }">
         <v-btn color="primary" v-on="on">Load Grid</v-btn>
       </template>
+      <v-list>
+        <v-list-tile
+          v-for="grid in gridList"
+          :key="grid.id"
+          @click="SELECT_GRID(grid.id)"
+        >
+          <v-list-tile-content>
+            {{grid.name}}
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
     </v-menu>
     <!-- <v-btn @click="SAVE_GRID">Save Grid</v-btn> -->
 
@@ -34,8 +45,10 @@ import { Component, Prop } from 'vue-property-decorator'
 import { Getter, Mutation, namespace } from 'vuex-class'
 
 import { GridTile } from '@/store/modules/grid/types';
+import { SavedGrid } from '@/store/modules/grid-list/types';
 
 const gridMod = namespace('grid');
+const gridListMod = namespace('gridList');
 
 @Component
 export default class SBCanvasControls extends Vue {
@@ -52,6 +65,8 @@ export default class SBCanvasControls extends Vue {
 
 
   // STORE
+  // state
+  @gridListMod.State('list') gridList!: SavedGrid[]
   // getters
   @gridMod.Getter selectedTile!: GridTile | null;
   // mutations
@@ -59,6 +74,7 @@ export default class SBCanvasControls extends Vue {
   // actions
   @gridMod.Action GENERATE_NEW_GRID: any;
   @gridMod.Action SAVE_GRID: any;
+  @gridListMod.Action SELECT_GRID: any;
 
   get color(): string {
     if (this.selectedTile) return this.selectedTile.color;
