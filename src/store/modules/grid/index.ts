@@ -8,7 +8,7 @@ const STORAGE_KEY = 'grid';
 function initialState(): GridState {
   return {
     width: 500,
-    height: 600,
+    height: 500,
     cols: 0,
     rows: 0,
     id: null,
@@ -25,11 +25,6 @@ export default {
   state: initialState(),
   mutations: {
     SET_GRID(state: GridState, payload: SavedGrid) {
-      // Object.entries(payload).forEach(([key, value]) => {
-      //   if (state[key] !== undefined) {
-      //     state[key] = value;
-      //   }
-      // });
       Object.assign(state, payload);
     },
     SET_SELECTED(state: GridState, payload: { rowIndex: number | null, colIndex: number | null }) {
@@ -38,7 +33,7 @@ export default {
       state.selected.col = colIndex;
     },
     SET_TILE_COLOR(state: GridState, payload: string) {
-      if (state.selected.row) {
+      if (state.selected.row !== null) {
         state.grid[state.selected.row][state.selected.col!].color = payload;
       }
     },

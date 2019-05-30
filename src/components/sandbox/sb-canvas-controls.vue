@@ -1,15 +1,10 @@
 <template>
-  <v-toolbar flat>
-    <v-autocomplete
-      hide-details
-      label="Choose selected tile's color"
-      :disabled="!selectedTile"
-      v-model="color"
-      :items="clrOptions"
-    ></v-autocomplete>
-
+  <v-toolbar flat extended>
+    <v-toolbar-title>
+      {{gridName}}
+    </v-toolbar-title>
+    <v-spacer></v-spacer>
     <v-btn @click="$emit('update:makeNewGrid', !makeNewGrid)">New Grid</v-btn>
-
     <v-menu offset-y>
       <template v-slot:activator="{ on }">
         <v-btn color="primary" v-on="on">Load Grid</v-btn>
@@ -26,7 +21,15 @@
         </v-list-tile>
       </v-list>
     </v-menu>
-    <!-- <v-btn @click="SAVE_GRID">Save Grid</v-btn> -->
+
+    <template v-slot:extension>
+      <v-autocomplete
+      hide-details
+      label="Choose selected tile's color"
+      :disabled="!selectedTile"
+      v-model="color"
+      :items="clrOptions"
+    ></v-autocomplete>
 
     <v-spacer></v-spacer>
     <v-slider 
@@ -35,7 +38,9 @@
       ticks
       :tick-labels="[1,2,3,4,5,6,7,8,9,10]"
       v-model="scale"
-    ></v-slider>    
+    ></v-slider>   
+    </template>
+     
   </v-toolbar>
 </template>
 
@@ -67,6 +72,7 @@ export default class SBCanvasControls extends Vue {
   // STORE
   // state
   @gridListMod.State('list') gridList!: SavedGrid[]
+  @gridMod.State('name') gridName!: string
   // getters
   @gridMod.Getter selectedTile!: GridTile | null;
   // mutations
