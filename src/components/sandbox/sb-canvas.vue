@@ -6,6 +6,9 @@
       :width="width"
       @click="getTile"
     ></canvas>
+    <v-img width="100" :src="forestImg"></v-img>
+    <v-img width="100" :src="oceanImg"></v-img>
+    <v-img width="100" :src="plainsImg"></v-img>
     <slot></slot>
   </div>
 </template>
@@ -20,6 +23,10 @@ const gridListMod = namespace('gridList');
 
 @Component
 export default class SBCanvas extends Vue {
+
+  forestImg = require('../../assets/forest.png')
+  oceanImg = require('../../assets/ocean.png')
+  plainsImg = require('../../assets/plains.png')
 
   // DATA
   clrNeutral: string = '#fafafa';
@@ -65,7 +72,6 @@ export default class SBCanvas extends Vue {
   }
   drawGrid(t?: GridTile) {
     if (this.ctx) this.ctx.clearRect(0, 0, this.width, this.height);
-
     this.grid.forEach((row: GridTile[]) => {
       row.forEach((tile: GridTile) => {
         this.draw((ctx: CanvasRenderingContext2D) => {
