@@ -6,9 +6,6 @@
       :width="width"
       @click="getTile"
     ></canvas>
-    <v-img width="100" :src="forestImg"></v-img>
-    <v-img width="100" :src="oceanImg"></v-img>
-    <v-img width="100" :src="plainsImg"></v-img>
     <slot></slot>
   </div>
 </template>
@@ -18,15 +15,15 @@ import Vue from 'vue'
 import { GridTile } from '@/store/modules/grid/types'
 import { State, Getter, Mutation, Action, namespace } from 'vuex-class'
 import { Component, Watch, Provide } from 'vue-property-decorator'
+
+import { ColorItem } from '@/store/modules/color-map/types';
+
+const colorMapMod = namespace('colorMap');
 const gridMod = namespace('grid');
 const gridListMod = namespace('gridList');
 
 @Component
 export default class SBCanvas extends Vue {
-
-  forestImg = require('../../assets/forest.png')
-  oceanImg = require('../../assets/ocean.png')
-  plainsImg = require('../../assets/plains.png')
 
   // DATA
   clrNeutral: string = '#fafafa';
@@ -41,6 +38,7 @@ export default class SBCanvas extends Vue {
   @gridMod.State cols!: number;
   @gridMod.State rows!: number;
   // getters
+   @colorMapMod.Getter colorsIndexedByLabel!: {[key: string]: string}
   @gridMod.Getter selectedTile!: GridTile | null;
   // mutations
   @gridMod.Mutation SIZE_TILES: any
@@ -75,7 +73,7 @@ export default class SBCanvas extends Vue {
     this.grid.forEach((row: GridTile[]) => {
       row.forEach((tile: GridTile) => {
         this.draw((ctx: CanvasRenderingContext2D) => {
-          ctx.fillStyle = tile.color || this.clrOffwhite;
+          ctx.fillStyle = this.colorsIndexedByLabel[tile.color] || this.clrOffwhite;
           ctx.rect(tile.x, tile.y, tile.width, tile.height);
           ctx.fill();
           if (t === tile) {

@@ -62,9 +62,9 @@ export default class SBCanvasNewGridDialog extends Vue {
 
   name: string = ''
   nameRules = [(v: string) => !!v || 'Name is required']
-  rows: number = 20
+  rows = 12
   rowsRules = [(v: number) => (!!v && v <= 40 && v >= 10) || 'There must be between 10 and 40 rows']
-  cols: number = 12
+  cols = 12
   colsRules = [(v: number) => (!!v && v <= 40 && v >= 10) || 'There must be between 10 and 40 columns']
 
   @Action('grid/GENERATE_NEW_GRID') GENERATE_NEW_GRID!: Function

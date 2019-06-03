@@ -24,12 +24,18 @@
 
     <template v-slot:extension>
       <v-autocomplete
-      hide-details
-      label="Choose selected tile's color"
-      :disabled="!selectedTile"
-      v-model="color"
-      :items="clrOptions"
-    ></v-autocomplete>
+        hide-details
+        label="Choose selected tile's color"
+        :disabled="!selectedTile"
+        v-model="color"
+        :items="colors"
+        item-value="label"
+        item-text="label"
+      >
+        <template v-slot:label="{ item }">
+          {{item.label}}
+        </template>
+      </v-autocomplete>
 
     <v-spacer></v-spacer>
     <v-slider 
@@ -47,11 +53,13 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import { Getter, Mutation, namespace } from 'vuex-class'
+import { Getter, State, Mutation, namespace } from 'vuex-class'
 
+import { ColorItem } from '@/store/modules/color-map/types'
 import { GridTile } from '@/store/modules/grid/types';
 import { SavedGrid } from '@/store/modules/grid-list/types';
 
+const colorMapMod = namespace('colorMap');
 const gridMod = namespace('grid');
 const gridListMod = namespace('gridList');
 
@@ -62,15 +70,15 @@ export default class SBCanvasControls extends Vue {
 
   // Data
   scale = 5;
-  clrOptions = ['blue', 'green', 'red', 'yellow', 'gray'];
-  newGridArgs = {
-    rows: 20,
-    cols: 12,
-  };
+  // newGridArgs = {
+  //   rows: 12,
+  //   cols: 12,
+  // };
 
 
   // STORE
   // state
+  @colorMapMod.State colors!: ColorItem[]
   @gridListMod.State('list') gridList!: SavedGrid[]
   @gridMod.State('name') gridName!: string
   // getters
@@ -90,5 +98,6 @@ export default class SBCanvasControls extends Vue {
     this.SET_TILE_COLOR(val);
     this.SAVE_GRID();
   }
+
 }
 </script>
