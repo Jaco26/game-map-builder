@@ -1,6 +1,9 @@
 <template>
   <div>
-    <t-m-canvas></t-m-canvas>
+    <t-m-canvas>
+      <TMTileComponent />
+    </t-m-canvas>
+
   </div>
 </template>
 

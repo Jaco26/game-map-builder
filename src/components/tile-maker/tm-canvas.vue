@@ -1,7 +1,8 @@
 <template>
   <div>
     <canvas ref="tile-maker-canvas"></canvas>
-    <t-m-tile-component></t-m-tile-component>
+    <slot></slot>
+    <!-- <t-m-tile-component></t-m-tile-component> -->
   </div>
 </template>
 
@@ -9,12 +10,8 @@
 import { Vue, Component, Provide } from 'vue-property-decorator'
 import { DrawCB } from './types'
 
-import TMTileComponent from './tm-tile-component.vue'
-@Component({
-  components: {
-    TMTileComponent,
-  }
-})
+// import TMTileComponent from './tm-tile-component.vue'
+@Component
 export default class TMCanvas extends Vue {
   // the fixed px value of height and width of the canvas element --- it will serve as a frame to render
   // the tile component being designed --- the frame will support multiple zoom levels
@@ -22,11 +19,7 @@ export default class TMCanvas extends Vue {
 
   ctx: CanvasRenderingContext2D | null = null
 
-  // @Provide 
-
-  // @Provide('_draw') private _draw: Function = this.draw
-  // // @Provide('_draw') _draw: (cb: DrawCB) => void = this.draw
-  // // this.draw!: (cb: DrawCB) => void
+  @Provide('draw') draw = this.draw;
 
   draw(cb: DrawCB): void {
     if (!this.ctx) return
