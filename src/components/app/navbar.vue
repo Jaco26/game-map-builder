@@ -27,8 +27,8 @@ export default Vue.extend({
           text: 'Sandbox',
         },
         {
-          to: { name: 'about' },
-          text: 'about',
+          to: { name: 'create-tile' },
+          text: 'Create Tile',
         },
       ],
     }

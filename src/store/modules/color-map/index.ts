@@ -11,6 +11,7 @@ function initialState(): ColorMapState {
       genClr('red', 'aa554488'),
       genClr('green', '44aa5588'),
       genClr('blue', '4455aa88'),
+      genClr('gray', '777')
     ],
   }
 }
