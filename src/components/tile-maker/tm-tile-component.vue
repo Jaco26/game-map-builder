@@ -1,5 +1,3 @@
-
-
 <script lang="ts">
 import { Vue, Component, Prop, Inject } from 'vue-property-decorator'
 import { CreateElement } from 'vue';
@@ -20,8 +18,13 @@ export default class TMTileComponent extends Vue {
 
   @Inject() draw!: (cb: (ctx: CanvasRenderingContext2D) => void) => void
 
-  render(c: CreateElement) {
-    return c('div', ['hi'])
+
+  render() {
+    // this.draw(ctx => {
+    //   ctx.moveTo(40, 60);
+    //   ctx.lineTo(300,340)
+    //   ctx.stroke()
+    // })
   }
 }
 </script>

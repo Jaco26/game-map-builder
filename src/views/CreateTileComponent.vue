@@ -3,7 +3,6 @@
     <t-m-canvas>
       <TMTileComponent />
     </t-m-canvas>
-
   </div>
 </template>
 
