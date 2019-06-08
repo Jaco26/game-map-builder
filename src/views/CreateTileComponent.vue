@@ -36,15 +36,18 @@ type Ctx = CanvasRenderingContext2D
 export default class CreateTileComponent extends Vue {
   selectedBrushName = 'mountain'
 
+  
+
   brushOptions: { [key: string]: Function } = {
     mountain: (ctx: Ctx, { x, y, height, width }: GridTile) => {
       ctx.moveTo(x + 10, y + height - 10)
       ctx.lineTo(x + (width * 0.5), y + (height * 0.2))
       ctx.lineTo(x + (width * 0.9), y + (height * 0.9))
       ctx.fillStyle = 'gray'
+      ctx.fill()
       ctx.strokeStyle = 'black'
       ctx.stroke()
-      ctx.fill()
+      
     },
     forest: (ctx: Ctx, { x, y, height, width, row }: GridTile) => {
       const xOffset = row % 2 === 0 ? -(width * 0.15) : (width * 0.15)

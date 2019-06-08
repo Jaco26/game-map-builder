@@ -4,7 +4,9 @@
     <v-content>
       <v-container fluid>
         <v-layout justify-center>
-          <router-view></router-view>
+          <v-flex>
+            <router-view></router-view>
+          </v-flex>
         </v-layout>
       </v-container>
     </v-content>
