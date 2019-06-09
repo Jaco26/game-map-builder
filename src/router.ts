@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Sandbox from './views/Sandbox.vue'
-import CreateTileComponent from './views/TilePainter.vue'
+import CreateTileComponent from './views/TilePainterV2.vue'
 
 Vue.use(Router)
 
