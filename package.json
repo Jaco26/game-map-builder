@@ -18,9 +18,9 @@
     "vuex-class": "^0.3.2"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.4",
+    "@vue/cli-plugin-babel": "^3.7.0",
     "@vue/cli-plugin-typescript": "^3.0.4",
-    "@vue/cli-service": "^3.0.4",
+    "@vue/cli-service": "^5.0.8",
     "material-design-icons-iconfont": "^5.0.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
